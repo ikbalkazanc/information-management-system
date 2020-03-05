@@ -1,0 +1,110 @@
+﻿@using MEBSİS.Models
+@using Entities.Databases
+@model HomeViewModel<CompanyDB>
+@{
+    ViewBag.Title = "CompanyList";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<br>
+<br>
+<br>
+<br>
+<h2>CompanyList</h2>
+<hr>
+<br>
+<br>
+
+<div class="alert alert-success" role="alert">
+    <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @using (Html.BeginForm("CompanyAdd", "AdminCompany", FormMethod.Post))
+                {
+                    <div class="modal-header text-center">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title w-100 font-weight-bold">
+                            @Html.Label("Mezun ekleme paneli")
+                        </h4>
+                    </div>
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5">
+
+                            @Html.Label("Ad :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                            @*<label data-error="wrong" data-success="right" for="">Your name</label>*@
+                            @Html.TextBoxFor(m => m.modelX.company_name, new { @class = "form-control validate", id = "Form-name", type = "text", })
+                            @*<input type="text" id="orangeForm-name" class="form-control validate">*@
+                            <i class="fas fa-user prefix grey-text"></i>
+                        </div>
+                        <div class="md-form mb-5">
+
+                            @Html.Label("Ülke :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                            @*<label data-error="wrong" data-success="right" for="">Your name</label>*@
+                            @Html.TextBoxFor(m => m.modelX.company_country, new { @class = "form-control validate", id = "Form-country", type = "text", })
+                            @*<input type="text" id="orangeForm-name" class="form-control validate">*@
+                            <i class="fas fa-user prefix grey-text"></i>
+                        </div>
+                        <div class="md-form mb-5">
+
+                            @Html.Label("Şehir :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                            @*<label data-error="wrong" data-success="right" for="">Your name</label>*@
+                            @Html.TextBoxFor(m => m.modelX.company_city, new { @class = "form-control validate", id = "Form-city", type = "text", })
+                            @*<input type="text" id="orangeForm-name" class="form-control validate">*@
+                            <i class="fas fa-user prefix grey-text"></i>
+                        </div>
+                        <div class="md-form mb-5">
+
+                            @Html.Label("Açık adres :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                            @*<label data-error="wrong" data-success="right" for="">Your name</label>*@
+                            @Html.TextBoxFor(m => m.modelX.company_fullAddress, new { @class = "form-control validate", id = "Form-adress", type = "text", })
+                            @*<input type="text" id="orangeForm-name" class="form-control validate">*@
+                            <i class="fas fa-user prefix grey-text"></i>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center ">
+                        <button type="submit" class="btn btn-deep-orange">Ekle</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        Sisteme yeni birfirma eklemek için tıklayınız.
+        <a href="" class="btn btn-default btn-rounded mb-4 btn btn-warning" data-toggle="modal" data-target="#modalRegisterForm">
+            Yeni bir firma ekle
+        </a>
+    </div>
+
+</div>
+
+<table class="table">
+    <thead class="thead-dark text-center">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">company name</th>
+            <th scope="col">company country</th>
+            <th scope="col">Sil</th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.modelsX)
+        {
+            <tr>
+                <th scope="row">@item.company_id</th>
+                <td>@item.company_name</td>
+                <td>@item.company_country</td>
+                <td>
+                    <a href="CompanyDelete/@item.company_id" style="margin:0px -30px" class="btn btn-danger">Firmayı Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

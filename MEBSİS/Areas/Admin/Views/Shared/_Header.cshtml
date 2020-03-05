@@ -1,0 +1,67 @@
+﻿@using Postgresql.Manager.Managers
+@using Entities.Databases
+
+@{
+    bool accountOn = true;
+    Admin user = new Admin();
+    AdminManager adminManager = AdminManager.CreateAsAdminManager() ;
+
+    if (User.Identity.Name == "")
+    {
+        accountOn = false;
+    }
+    else
+    {
+        user = adminManager.getID(Int32.Parse(User.Identity.Name));
+
+    }
+    }
+
+    @{
+        Layout = null;
+    }
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid container body-content">
+
+            <ul class="nav navbar-nav ">
+                <li>
+                    @Html.ActionLink("İlan Duvarı", "NoticePage", "Admin/AdminNotice", new { area = "" }, new { @class = "navbar-brand" })
+                </li>
+
+                <li class="dropdown">
+                    @Html.ActionLink("Profiller ▼", "JobList", "Admin/AdminJob", new { area = "" }, new { @class = "navbar-brand dropdown-toggle", data_toggle = "dropdown" })
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("Mezunlar", "GraduateList", "Admin/AdminGraduate", new { area = "" }, new { @class = "navbar-brand" })</li>
+                        <li>@Html.ActionLink("Firmalar", "CompanyList", "Admin/AdminCompany", new { area = "" }, new { @class = "navbar-brand" })</li>
+                    </ul>
+                </li>
+
+              
+                <li>
+                    @Html.ActionLink("İstatistik", "Stat", "Stat", new { area = "Admin" }, new { @class = "navbar-brand" })
+                </li>
+
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                @Html.ActionLink("Çıkış", "LogOut", "AdminSecurity", new { area = "Admin" }, new { @class = "navbar-brand" })
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                @Html.Label("  |  ", new { @class = "navbar-brand" })
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                <p class="navbar-brand">@user.admin_name @user.admin_surname</p>
+
+            </ul>
+
+        </div>
+    </nav>
+
+

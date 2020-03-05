@@ -1,0 +1,52 @@
+﻿@using MEBSİS.Models
+@using Entities.Databases
+@model HomeViewModel<JobDB>
+
+@{
+    ViewBag.Title = "JobList";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@*BU MUHTEMELEN HATALI BİR SAYFA DÜZELTİLMESİ GEREKİYOR !!*@
+<br>
+<br>
+<br>
+<br>
+<h2>JobList</h2>
+<hr>
+<br>
+<br>
+<table class="table">
+    <thead class="thead-dark text-center">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Workfield</th>
+            <th scope="col">Workposition</th>
+            <th scope="col">START DATE</th>
+            <th scope="col">ENDİNG DATE</th>
+            <th scope="col">COMPANY ID</th>
+            <th scope="col">COMPANY NAME </th>
+            <th scope="col">Sil</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.modelsX)
+        {
+        <tr>
+            <th scope="row">@item.job_id</th>
+            <td>@item.job_workfield</td>
+            <td>@item.job_workposition</td>
+            <td>@item.start_date</td>
+            <td>@item.ending_date</td>
+            <td>@item.job_company.company_id</td>
+            <td>@item.job_company.company_name</td>
+            <td>
+                <a href="/MGS/DeletePerson/@item.job_id" style="margin:0px -30px" class="btn btn-danger">Kişiyi Sil</a>
+            </td>
+
+
+        </tr>
+        }
+    </tbody>
+</table>

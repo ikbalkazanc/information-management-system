@@ -1,0 +1,881 @@
+﻿@using MEBSİS.Models
+@using Entities.Databases
+@using Postgresql.Manager;
+@using Postgresql.Manager.Managers;
+@model HomeViewModel<GraduateDB>
+
+@{
+    GraduateManager graduatemanager = GraduateManager.CreateAsGraduateManager();
+    SelectionList selection = new SelectionList();
+    bool onself = false;
+
+
+    if (Model.userx.id == Model.modelX.graduate_id)
+    {
+        onself = true;
+    }
+
+    GraduateDB user = new GraduateDB();
+
+    if (User.Identity.Name != "")
+    {
+        user = graduatemanager.getID(Int32.Parse(User.Identity.Name));
+
+    }
+    bool userisFollower = false;
+    var ptt = Model.modelX.graduate_followers.IndexOf(user.graduate_id);
+    if (ptt == -1)
+    {
+        userisFollower = true;
+    }
+
+    ViewBag.Title = "Profil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<!-- COMPANY FORM-->
+<div class="modal fade" id="modalCompanyForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            @using (Html.BeginForm("CompanyAddfromProfile", "Company", FormMethod.Post))
+            {
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title w-100 font-weight-bold">
+                        @Html.Label("Firma ekleme paneli")
+                    </h4>
+                </div>
+                <div class="modal-body mx-3">
+                    <div class="md-form mb-5">
+                        @Html.Label("Firma ismi giriniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-company-name" })
+                        @*<label data-error="wrong" data-success="right" for="">Your name</label>*@
+                        @Html.TextBoxFor(m => m.company.company_name, new { @class = "form-control validate", id = "Form-company-name", type = "text", })
+                        <i class="fas fa-user prefix grey-text"></i>
+                        <br />
+                    </div>
+                    <div class="md-form mb-5">
+                        @Html.Label("Bulunduğu ülke :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-company-country" })
+                        @Html.TextBoxFor(m => m.company.company_country, new { @class = "form-control validate", id = "Form-company-country", type = "text", })
+
+                        @Html.HiddenFor(m => m.modelX.graduate_id)
+
+                        @Html.HiddenFor(m => m.userx.id)
+
+                        <i class="fas fa-lock prefix grey-text"></i>
+                        <br />
+                    </div>
+                    <div class="md-form mb-5">
+                        @Html.Label("Bulunduğu şehir :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-company-city" })
+                        @Html.TextBoxFor(m => m.company.company_city, new { @class = "form-control validate", id = "Form-company-city", type = "text", })
+                        <i class="fas fa-lock prefix grey-text"></i>
+                        <br />
+                    </div>
+                    <div class="md-form mb-5">
+                        @Html.Label("Açık adres :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-company-address" })
+                        @Html.TextBoxFor(m => m.company.company_fullAddress, new { @class = "form-control validate", id = "Form-company-address", type = "text", })
+                        <i class="fas fa-lock prefix grey-text"></i>
+                        <br />
+                    </div>
+
+
+
+
+                </div>
+                <div class="modal-footer d-flex justify-content-center ">
+
+                    <button type="submit" class="btn btn-deep-orange">Ekle</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!--COMPANY FORM BİTİŞ-->
+<!-- Pop-up-->
+<div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+
+            @using (Html.BeginForm("AddJob", "Profile", FormMethod.Post))
+            {
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title w-100 font-weight-bold">
+                        @Html.Label("Deneyim ekleme paneli")
+                    </h4>
+                </div>
+                <div class="modal-body mx-3">
+                    <div class="md-form mb-5">
+
+                        @Html.Label("Şirket id'nizi giriniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                        @*<label data-error="wrong" data-success="right" for="">Your name</label>*@
+                        @Html.TextBoxFor(m => m.company.company_id, new { @class = "form-control validate", id = "Form-name", type = "text", })
+                        <i class="fas fa-user prefix grey-text"></i>
+
+                        @Html.HiddenFor(m => m.modelX.graduate_id)
+                        @Html.HiddenFor(m => m.userx.id)
+                        <a href="#" data-toggle="modal" data-target="#modalCompany" class="btn btn-info">Firma Listesini Gör</a>
+                        @*<input type="text" id="orangeForm-name" class="form-control validate">*@
+                        <
+                        <br />
+                        <br />
+                    </div>
+                    <div class="md-form mb-5 ">
+                        @Html.Label("İş başlangıç tarihi :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-start" })
+                        @Html.TextBoxFor(m => m.modelX.graduate_view_job_list.start_temp_date, new { @class = "form-control validate", id = "Form-start", type = "date" })
+                        <i class="fas fa-lock prefix grey-text"></i>
+                        <br />
+                    </div>
+                    <div class="md-form mb-5">
+                        @Html.Label("İş Bitiş tarihi :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-ending" })
+                        @Html.TextBoxFor(m => m.modelX.graduate_view_job_list.ending_temp_date, new { @class = "form-control validate", id = "Form-ending", type = "date" })
+                        <i class="fas fa-lock prefix grey-text">Eğer çalışmaya devam ediyorsanız boş bırakınız.</i>
+                        <br />
+                    </div>
+                    <div class="md-form mb-5">
+                        @Html.Label("Çalışma pozisyonuzuz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-position" })
+                        
+                        @Html.DropDownListFor(m => m.modelX.graduate_view_job_list.job_workposition,
+new SelectList(selection.selection),
+"Pozisyon", new { @class = "form-control", style = "display:inline-flex;", id = "Form-position" })
+
+                        <i class="fas fa-lock prefix grey-text"></i>
+                        <br />
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center ">
+
+                    <button type="submit" class="btn btn-deep-orange">Ekle</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Pop-up bitiş-->
+<!-- Pop-up-->
+
+
+
+<div class="modal fade" id="modalInternNoticeForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            @using (Html.BeginForm("AddInternNotice", "Profile", FormMethod.Post))
+            {
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title w-100 font-weight-bold">
+                        @Html.Label("İlan ekleme paneli")
+                    </h4>
+                </div>
+                <div class="modal-body mx-3">
+
+                    <div class="md-form mb-5">
+                        @Html.TextBoxFor(m => m.modelX.graduate_id, new { @class = "form-control validate hidden", value = @Model.modelX.graduate_id, id = "Form-grad-id", type = "text" })
+                        @Html.TextBoxFor(m => m.noticeIntern.notice_graduate.graduate_id, new { @class = "form-control validate hidden", @Model.modelX.graduate_id, id = "Form-grad-id", type = "text" })
+                        @Html.CheckBoxFor(m => m.noticeIntern.isIntern, new { @class = "form-control validate hidden", @checked = "checked" })
+                        @Html.TextBoxFor(m => m.modelX.graduate_id, new { @class = "form-control validate hidden", value = @Model.modelX.graduate_id, id = "Form-grad-id", type = "text" })
+
+                        @Html.Label("Başlık Giriniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                        @Html.TextBoxFor(m => m.noticeIntern.notice_title, new { @class = "form-control validate", id = "Form-name", type = "text", })
+                        <i class="fas fa-user prefix grey-text"></i>
+                        <br />
+                    </div>
+                    <div class="md-form mb-5">
+                        @Html.Label("İçerik giriniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                        @Html.TextAreaFor(m => m.noticeIntern.notice_text, new { @class = "form-control validate", id = "Form-name", type = "text", })
+
+                        @Html.HiddenFor(m => m.modelX.graduate_id)
+
+                        @Html.HiddenFor(m => m.userx.id)
+                        <i class="fas fa-user prefix grey-text"></i>
+                        <br />
+                    </div>
+                    <div class="md-form mb-5">
+                        @Html.Label("Çalışma pozisyonu giriniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                        @Html.TextBoxFor(m => m.noticeIntern.notice_workfield, new { @class = "form-control validate", id = "Form-name", type = "text", })
+                        <i class="fas fa-user prefix grey-text"></i>
+                        <br />
+                    </div>
+                    <br>
+                    <div class="md-form mb-5">
+                        @Html.Label("Dönem şeçiniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                        <span>
+                            Yaz  :
+                            @Html.RadioButtonFor(m => m.noticeIntern.notice_intern_period, "Yaz", new { @class = "", @checked = "checked" })
+                        </span>
+                        <span>
+                            Kış  :
+                            @Html.RadioButtonFor(m => m.noticeIntern.notice_intern_period, "Güz")
+                        </span>
+                        <i class="fas fa-user prefix grey-text"></i>
+                        <br />
+                    </div>
+                    <div class="md-form mb-5">
+                        @Html.Label("Gün sayısı griniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                        @Html.TextBoxFor(m => m.noticeIntern.notice_intern_lenght_days, new { @class = "form-control validate", id = "Form-name", type = "text", })
+                        <i class="fas fa-user prefix grey-text"></i>
+                        <br />
+                    </div>
+
+                </div>
+                <div class="modal-footer d-flex justify-content-center ">
+
+                    <button type="submit" class="btn btn-deep-orange">Ekle</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Pop-up bitiş-->
+<!-- Pop-up-->
+
+
+
+<div class="modal fade" id="modalJobNoticeForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            @using (Html.BeginForm("AddJobNotice", "Profile", FormMethod.Post))
+            {
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title w-100 font-weight-bold">
+                        @Html.Label("İlan ekleme paneli")
+                    </h4>
+                </div>
+                <div class="modal-body mx-3">
+
+                    <div class="md-form mb-5">
+                        @Html.TextBoxFor(m => m.modelX.graduate_id, new { @class = "form-control validate hidden", value = @Model.modelX.graduate_id, id = "Form-grad-id", type = "text" })
+                        @Html.TextBoxFor(m => m.noticeJob.notice_graduate.graduate_id, new { @class = "form-control validate hidden", @Model.modelX.graduate_id, id = "Form-grad-id", type = "text" })
+                        @Html.TextBoxFor(m => m.modelX.graduate_id, new { @class = "form-control validate hidden", value = @Model.modelX.graduate_id, id = "Form-grad-id", type = "text" })
+
+                        @Html.Label("Başlık Giriniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                        @Html.TextBoxFor(m => m.noticeJob.notice_title, new { @class = "form-control validate", id = "Form-name", type = "text", })
+                        <i class="fas fa-user prefix grey-text"></i>
+                        <br />
+                    </div>
+                    <div class="md-form mb-5">
+                        @Html.Label("İçerik giriniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                        @Html.TextAreaFor(m => m.noticeJob.notice_text, new { @class = "form-control validate", id = "Form-name", type = "text", })
+
+                        @Html.HiddenFor(m => m.modelX.graduate_id)
+
+                        @Html.HiddenFor(m => m.userx.id)
+                        <i class="fas fa-user prefix grey-text"></i>
+                        <br />
+                    </div>
+                    <div class="md-form mb-5">
+                        @Html.Label("Çalışma pozisyonu giriniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                        @Html.TextBoxFor(m => m.noticeJob.notice_workfield, new { @class = "form-control validate", id = "Form-name", type = "text", })
+                        <i class="fas fa-user prefix grey-text"></i>
+                        <br />
+                    </div>
+
+
+                    <div class="md-form mb-5">
+
+                        @Html.Label("Maaş giriniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                        @Html.TextBoxFor(m => m.noticeJob.notice_job_salary, new { @class = "form-control validate", id = "Form-name", type = "text", })
+                        <i class="fas fa-user prefix grey-text"></i>
+                        <br />
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer d-flex justify-content-center ">
+
+                    <button type="submit" class="btn btn-deep-orange">Ekle</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Pop-up bitiş-->
+<!--COMPANY pop-up Başlangıç-->
+
+<div class="modal fade" id="modalCompany" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <table class="table">
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">company name</th>
+                        <th scope="col">company country</th>
+                        <th scope="col">company city</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.companyList)
+                    {
+                        <tr>
+                            <th scope="row">@item.company_id</th>
+                            <td>@item.company_name</td>
+                            <td>@item.company_country</td>
+                            <td>@item.company_city</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="modal-footer d-flex justify-content-center ">
+                <a href="#" data-toggle="modal" data-target="#modalCompanyForm" class="btn btn-success">Firma Ekleme Ekranı</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--COMPANY pop-Up bitiş-->
+
+
+<section>
+    <div class="container">
+        <div class="profile-head" style=" background-color:#d6a59a;border-radius:10px;">
+            <div class="col-md- col-sm-4 col-xs-12">
+                <img src="~/images/empty-profile.png" class="img-responsive" />
+                <br>
+                <div class="btn  btn-info" style="margin-left:30px;margin-top:16px;">
+                    <span class=" glyphicon glyphicon-user"></span>
+                    <a href="#" data-toggle="modal" style="width:100px;height:45px;" data-target="#modalFollow">Takip Ettikleri</a>
+                </div>
+                <div class="btn  btn-info" style="margin-left:20px;margin-top:16px;">
+                    <span class="glyphicon glyphicon-user"></span>
+                    <a href="#" data-toggle="modal" style="width:100px;height:45px;" data-target="#modalFollowers">Takipçiler</a>
+                </div>
+            </div><!--col-md-4 col-sm-4 col-xs-12 close-->
+
+
+            <div class="col-md-5 col-sm-5 col-xs-12">
+
+                <h5>@Model.modelX.graduate_name @Model.modelX.graduate_surname</h5>
+                <p>@Model.modelX.graduate_workfield </p>
+                <ul>
+
+                    <li><span class="glyphicon glyphicon-map-marker"></span> @Model.modelX.graduate_city / @Model.modelX.graduate_country </li>
+                    <li><span class="glyphicon glyphicon-phone"></span> @Model.modelX.graduate_phone</li>
+                    <li><span class="glyphicon glyphicon-envelope"></span>@Model.modelX.graduate_mail</li>
+                    <li>
+                        <br>
+                        @if (!onself)
+                        {
+                            if (userisFollower)
+                            {
+                                <div class="btn  btn-success" style="margin-top:20px;">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    @Html.ActionLink("Takit Et", "follow", "Profile", new { area = "", grad_id = Model.modelX.graduate_id }, new { style = "width:100px;height:45px;" })
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="btn  btn-danger" style="margin-top:20px;">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                    @Html.ActionLink("Takipten Çık", "unfollow", "Profile", new { area = "", grad_id = Model.modelX.graduate_id }, new { style = "width:100px;height:45px;" })
+                                </div>
+                            }
+                        }
+                    </li>
+                </ul>
+            </div><!--col-md-8 col-sm-8 col-xs-12 close-->
+
+
+        </div><!--profile-head close-->
+    </div><!--container close-->
+
+    <br><br>
+    <div id="sticky" class="container ">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs nav-menu" role="tablist">
+            <li class="active">
+                <a href="#profile" role="tab" data-toggle="tab">
+                    <i class="fa fa-male"></i> Profil
+                </a>
+            </li>
+            <li>
+                <a href="#change" role="tab" data-toggle="tab">
+                    <i class="fa fa-key"></i> Deneyim
+                </a>
+            </li>
+            @if (onself)
+            {
+                <li>
+                    <a href="#update" role="tab" data-toggle="tab">
+                        <i class="fa fa-key"></i> Güncelleme
+                    </a>
+                </li>
+            }
+            <li>
+                <a href="#notice" role="tab" data-toggle="tab">
+                    <i class="fa fa-key"></i> İlan
+                </a>
+            </li>
+        </ul><!--nav-tabs close-->
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane fade active in" id="profile">
+                <div class="container">
+                    <div class="col-sm-11" style="float:left;">
+                    </div><!--col-sm-12 close-->
+                    <br clear="all" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="pro-title">Bio Graph</h4>
+                        </div><!--col-md-12 close-->
+
+
+                        <div class="col-md-6">
+
+                            <div class="table-responsive responsiv-table">
+                                <table class="table bio-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>İsim</td>
+                                            <td>: @Model.modelX.graduate_name</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Soyisim</td>
+                                            <td>: @Model.modelX.graduate_surname</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Yaş</td>
+                                            <td>
+                                                :
+                                                @{
+                                                    var p = DateTime.Now.Year - Model.modelX.graduate_birth.Year;
+                                                }
+                                                @p
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ülke</td>
+                                            <td>: @Model.modelX.graduate_country</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Şehir</td>
+                                            <td>: @Model.modelX.graduate_city</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Açık Adres</td>
+                                            <td>: @Model.modelX.graduate_fulladress</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Çalıştığı pozisyon</td>
+                                            <td>: @Model.modelX.graduate_workposition</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div><!--table-responsive close-->
+                        </div><!--col-md-6 close-->
+
+                        <div class="col-md-6">
+
+                            <div class="table-responsive responsiv-table">
+                                <table class="table bio-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>e@mail</td>
+                                            <td>: @Model.modelX.graduate_mail</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Telefon</td>
+                                            <td>: +90 @Model.modelX.graduate_phone</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Okul</td>
+                                            <td>: @Model.modelX.graduate_school</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ortalama</td>
+                                            <td>: @Model.modelX.graduate_school_average</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Dil</td>
+                                            <td>
+                                                :
+                                                @foreach (var item in @Model.modelX.graduate_language)
+                                                {
+                                                    <span>, <span>@item </span></span>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sertifika</td>
+                                            <td>
+                                                @foreach (var item in @Model.modelX.graduate_certificate)
+                                                {
+                                                    <span>: <span>@item </span>,</span>
+                                                }
+
+                                            </td>
+                                        <tr>
+                                            <td>İlgialanı</td>
+                                            <td>: @Model.modelX.graduate_workfield</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div><!--table-responsive close-->
+                        </div><!--col-md-6 close-->
+                    </div><!--row close-->
+                </div><!--container close-->
+            </div><!--tab-pane close-->
+
+
+            <div class="tab-pane fade" id="change">
+                <div class="container ">
+                    @if (onself)
+                    {
+                        <div class="row text-center">
+                            <div class="card" style="margin:0% 5% 0% 0%; background-color:#FFECE8; border-radius:10px; text-align:left;">
+                                <div class="card-body ">
+                                    <br />
+                                    <h5 class="card-title">İş deneyimi listesi</h5>
+                                    @if (Model.modelX.graduate_job_list.Count == 0)
+                                    {
+                                        <p class="card-text">Listede iş deneyimi bulunmamaktadır.Eklemek için Butona basınız.</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="card-text">Yeni bir iş deneyimi eklemek için butona basınız.</p>
+                                    }
+
+                                    <a href="#" data-toggle="modal" data-target="#modalRegisterForm" class="btn btn-info">İş ekle</a>
+                                    <br />
+
+                                    <br />
+                                </div>
+
+
+                            </div>
+                        </div><!--row close-->
+                    }
+                    else
+                    {
+                        <div class="row text-center">
+                            <div class="card" style="margin:0% 5% 0% 0%; background-color:#FFECE8; border-radius:10px; text-align:left;">
+                                <div class="card-body ">
+                                    <br />
+                                    <h5 class="card-title">İş deneyimi listesi</h5>
+                                    @if (Model.modelX.graduate_job_list.Count == 0)
+                                    {
+                                        <p class="card-text">Listede iş deneyimi bulunmamaktadır</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="card-text">@Model.modelX.graduate_name 'nin deneyimleri aşşağıdadır.</p>
+                                    }
+                                    <br />
+                                    <br />
+                                </div>
+                            </div>
+                        </div><!--row close-->
+                    }
+                    <br /><br />
+                    @foreach (var item in Model.modelX.graduate_job_list)
+                    {
+
+                        <div class="row text-center">
+                            <div class="card row justify-content-between" style="margin:0% 5% 0% 0%; background-color:#FFECE8; border-radius:10px;text-align:left;">
+                                <div class="card-body ">
+
+                                    <h3 class="card-title">@item.job_company.company_name</h3>
+                                    @{
+                                        var jobyear = item.ending_date.Year - item.start_date.Year;
+                                        var jobmonyh = item.ending_date.Month - item.start_date.Month;
+                                    }
+                                    <h4>Pozisyon : @item.job_workposition</h4>
+                                    @if (item.ending_date.Year == 0001)
+                                    {
+                                        <h4> @item.start_date <span>'den beridir çalışmakta</span></h4>
+                                    }
+                                    else
+                                    {
+                                        <h4>Süre : @jobyear yıl @jobmonyh ay çalışmıştır</h4>
+                                    }
+                                    <a href="/deletejob/@Model.userx.id/@item.job_id" class="btn btn-danger">Deneyimi Sil</a>
+
+                                    <br />
+
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <br /> <br />
+                    }
+                </div><!--container close -->
+
+            </div><!--tab-pane close-->
+            <div class="tab-pane fade" id="update">
+                <div class="container fom-main">
+                    <div class="row ">
+                        <div class="card" style="margin-right:5%;  ">
+                            <div class="card-body ">
+                                @using (Html.BeginForm("Update", "Profile", FormMethod.Post))
+                                {
+                                    <div class="modal-body mx-3">
+                                        <div class="md-form mb-5 ">
+                                            @Html.Label("Çalıştığı pozisyon :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-position" })
+                                            
+                                            @Html.DropDownListFor(m => m.modelX.graduate_workposition,
+                    new SelectList(selection.selection),
+                    "Pozisyon", new { @class = "form-control", style = "display:inline-flex;", id = "Form-position" })
+                                            @Html.TextBoxFor(m => m.modelX.graduate_id, new { @class = "form-control validate hidden", value = @Model.modelX.graduate_id, id = "Form-grad-id", type = "text" })
+                                            <i class="fas fa-lock prefix grey-text"></i>
+                                            <br />
+                                        </div>
+                                        <div class="md-form mb-5 ">
+                                            @Html.Label("Mail :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-mail" })
+                                            @Html.TextBoxFor(m => m.modelX.graduate_mail, new { @class = "form-control validate", id = "Form-mail", type = "mail" })
+                                            @Html.HiddenFor(m => m.modelX.graduate_id)
+
+                                            @Html.HiddenFor(m => m.userx.id)
+                                            <i class="fas fa-lock prefix grey-text"></i>
+                                            <br />
+                                        </div>
+                                        <div class="md-form mb-5 ">
+                                            @Html.Label("Telefon numarası :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-phone" })
+                                            @Html.TextBoxFor(m => m.modelX.graduate_phone, new { @class = "form-control validate", id = "Form-phone", type = "text", maxlength = "10" })
+                                            <i class="fas fa-lock prefix grey-text"></i>
+                                            <br />
+                                        </div>
+                                        <div class="md-form mb-5 ">
+                                            @Html.Label("Dil giriniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-language" })
+                                            @Html.TextBoxFor(m => m.modelX.graduate_language_temp, new { @class = "form-control validate", id = "Form-language", type = "text" })
+                                            <i class="fas fa-lock prefix grey-text"></i>
+                                            <br />
+                                        </div>
+                                        <div class="md-form mb-5 ">
+                                            @Html.Label("Sertifika giriniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-certifice" })
+                                            @Html.TextBoxFor(m => m.modelX.graduate_certificate_temp, new { @class = "form-control validate", id = "Form-certifice", type = "text" })
+                                            <i class="fas fa-lock prefix grey-text"></i>
+                                            <br />
+                                        </div>
+                                        <div class="md-form mb-5 ">
+                                            @Html.Label("İlgi alanı giriniz :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-field" })
+                                            @Html.TextBoxFor(m => m.modelX.graduate_workfield, new { @class = "form-control validate", id = "Form-field", type = "text" })
+                                            <i class="fas fa-lock prefix grey-text"></i>
+                                            <br />
+                                        </div>
+                                        <div class="md-form mb-5 ">
+                                            @Html.Label("Şifre değiştir :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-field" })
+                                            @Html.TextBoxFor(m => m.modelX.graduate_password, new { @class = "form-control validate", id = "Form-field", type = "password" })
+                                            <i class="fas fa-lock prefix grey-text"></i>
+                                            <br />
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center ">
+                                        <button type="submit" class="btn btn-success">Güncelle</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div><!--row close-->
+                </div><!--container close -->
+            </div><!--tab-pane close-->
+
+            <div class="tab-pane fade text-center" id="notice">
+                <div class="container fom-main">
+                    @if (onself)
+                    {
+                        <div class="row ">
+                            <div class="card" style="margin:0% 5% 0% 0%; background-color:#FFECE8; border-radius:10px; text-align:left;">
+                                <div class="card-body ">
+                                    <br />
+                                    <h5 class="card-title">İş deneyimi listesi</h5>
+                                    @if (Model.jobnoticelist.Count == 0)
+                                    {
+                                        <p class="card-text">Listede iş deneyimi bulunmamaktadır.Eklemek için Butona basınız.</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="card-text">Yeni bir iş deneyimi eklemek için butona basınız.</p>
+                                    }
+
+                                    <a href="#" data-toggle="modal" data-target="#modalInternNoticeForm" class="btn btn-info">Stajyer ilanı ekle</a>
+                                    <a href="#" data-toggle="modal" data-target="#modalJobNoticeForm" class="btn btn-info">İş ilanı ekle</a>
+                                    <br />
+
+                                    <br />
+
+                                </div>
+                            </div>
+                        </div><!--row close-->
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="card" style="margin:0% 5% 0% 0%; background-color:#FFECE8; border-radius:10px;text-align:left;">
+                                <div class="card-body ">
+                                    <br />
+                                    <h5 class="card-title">İş deneyimi listesi</h5>
+                                    @if (Model.jobnoticelist.Count == 0)
+                                    {
+                                        <p class="card-text">Listede ilan  bulunmamaktadır</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="card-text">@Model.modelX.graduate_name 'nin ilanları aşşağıdadır</p>
+                                    }
+
+                                    <br />
+                                    <br />
+                                </div>
+                            </div>
+                        </div><!--row close-->
+                    }
+                    <br><br>
+                    @foreach (var item in Model.jobnoticelist)
+                    {
+
+                        <div class="row text-center">
+                            <div class="card row justify-content-between" style="margin:0% 5% 0% 0%; background-color:#FFECE8; border-radius:10px;text-align:left;">
+                                <div class="card-body ">
+
+                                    <h3 class="card-title">@item.notice_title</h3>
+                                    <h>@item.notice_text</h>
+                                    <h4>Aranan pozisyon : @item.notice_workfield</h4>
+                                    <h4>Maaş : @item.notice_job_salary</h4>
+                                    <h4>Tarih : @item.notice_date</h4>
+                                    <a href="/deletenotice/@Model.userx.id/@item.notice_id" class="btn btn-danger">İlan Sil</a>
+                                    <br />
+
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <br /> <br />
+                    }
+                    @foreach (var item in Model.internlist)
+                    {
+
+                        <div class="row text-center">
+                            <div class="card row justify-content-between" style="margin:0% 5% 0% 0%; background-color:#FFECE8; border-radius:10px;text-align:left;">
+                                <div class="card-body ">
+
+                                    <h3 class="card-title">@item.notice_title</h3>
+                                    <h4>@item.notice_text</h4>
+                                    <h4>Aranan pozisyon : @item.notice_workfield</h4>
+                                    <h4>Hangi dönem : @item.notice_intern_period</h4>
+                                    <h4>Kaç gün : @item.notice_intern_lenght_days</h4>
+                                    <h4>Tarih : @item.notice_date</h4>
+                                    <a href="/deletenotice/@Model.userx.id/@item.notice_id" class="btn btn-danger">İlan Sil</a>
+                                    <br />
+
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <br /> <br />
+                    }
+
+                </div><!--container close -->
+            </div><!--tab-pane close-->
+
+
+        </div><!--tab-content close-->
+
+    </div><!--container close-->
+
+</section><!--section close-->
+<!--Follow pop-up Başlangıç-->
+
+<div class="modal fade" id="modalFollow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <table class="table">
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="col">isim</th>
+                        <th scope="col">soyisim</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.modelX.graduate_followx)
+                    {
+                        GraduateDB temp = new GraduateDB();
+                        temp = graduatemanager.getID(item);
+                        <tr>
+                            <td class="text10px">
+                                <a style=" font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size:30px;
+    font-weight:bold;" href="/profil/@user.graduate_id/@temp.graduate_id">@temp.graduate_name</a>
+</td>
+<td class="text10px">
+    <a style=" font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size:30px;
+    font-weight:bold;" href="/profil/@user.graduate_id/@temp.graduate_id">@temp.graduate_surname</a>
+</td>
+</tr>
+}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!--Follower pop-up Başlangıç-->
+
+<div class="modal fade" id="modalFollowers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <table class="table">
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="col">isim</th>
+                        <th scope="col">soyisim</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.modelX.graduate_followersx)
+                    {
+                        GraduateDB temp = new GraduateDB();
+                        temp = graduatemanager.getID(item);
+                        <tr>
+                            <td>
+                                <a style=" font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size:30px;
+    font-weight:bold;" href="/profil/@user.graduate_id/@temp.graduate_id">@temp.graduate_name</a>
+</td>
+<td>
+    <a style=" font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size:30px;
+    font-weight:bold;" href="/profil/@user.graduate_id/@temp.graduate_id">@temp.graduate_surname</a>
+</td>
+</tr>
+}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MEBSİS", "MEBSİS\MEBSİS.csproj", "{B180AB84-A8AB-48E5-83E1-97734AD3233C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{5CFE8EDA-5420-47D8-81FE-9749E7FB3946}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgresql.Services", "Postgresql.Services\Postgresql.Services.csproj", "{3B2F89E6-4512-4245-8EB8-4A21AEDC67AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgresql.Manager", "Postgresql.Manager\Postgresql.Manager.csproj", "{E2A6851F-4242-4138-8C50-7176A9CEEE58}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B180AB84-A8AB-48E5-83E1-97734AD3233C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B180AB84-A8AB-48E5-83E1-97734AD3233C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B180AB84-A8AB-48E5-83E1-97734AD3233C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B180AB84-A8AB-48E5-83E1-97734AD3233C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CFE8EDA-5420-47D8-81FE-9749E7FB3946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CFE8EDA-5420-47D8-81FE-9749E7FB3946}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CFE8EDA-5420-47D8-81FE-9749E7FB3946}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CFE8EDA-5420-47D8-81FE-9749E7FB3946}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B2F89E6-4512-4245-8EB8-4A21AEDC67AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B2F89E6-4512-4245-8EB8-4A21AEDC67AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B2F89E6-4512-4245-8EB8-4A21AEDC67AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B2F89E6-4512-4245-8EB8-4A21AEDC67AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2A6851F-4242-4138-8C50-7176A9CEEE58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2A6851F-4242-4138-8C50-7176A9CEEE58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2A6851F-4242-4138-8C50-7176A9CEEE58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2A6851F-4242-4138-8C50-7176A9CEEE58}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA8A67C5-6DC3-462F-B2EB-99F424AF74FE}
+	EndGlobalSection
+EndGlobal

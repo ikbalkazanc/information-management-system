@@ -1,0 +1,397 @@
+﻿@using MEBSİS.Models;
+@using Entities.Databases;
+@using Postgresql.Manager.Managers;
+@model HomeViewModel<GraduateDB>
+
+@{
+    ViewBag.Title = "Profil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool accountOn = true;
+    Admin user = new Admin();
+    AdminManager adminManager = AdminManager.CreateAsAdminManager();
+    GraduateManager graduatemanager = GraduateManager.CreateAsGraduateManager();
+
+    if (User.Identity.Name == "")
+    {
+        accountOn = false;
+    }
+    else
+    {
+        user = adminManager.getID(Int32.Parse(User.Identity.Name));
+
+    }
+
+}
+
+
+<section>
+    <div class="container">
+        <div class="profile-head" style=" background-color:#d6a59a;border-radius:10px;">
+            <div class="col-md- col-sm-4 col-xs-12">
+                <img src="~/images/empty-profile.png" class="img-responsive" />
+                <br>
+                <div class="btn  btn-info" style="margin-left:30px;margin-top:16px;">
+                    <span class=" glyphicon glyphicon-user"></span>
+                    <a href="#" data-toggle="modal" style="width:100px;height:45px;" data-target="#modalFollow">Takip Ettikleri</a>
+                </div>
+                <div class="btn  btn-info" style="margin-left:20px;margin-top:16px;">
+                    <span class="glyphicon glyphicon-user"></span>
+                    <a href="#" data-toggle="modal" style="width:100px;height:45px;" data-target="#modalFollowers">Takipçiler</a>
+                </div>
+            </div><!--col-md-4 col-sm-4 col-xs-12 close-->
+
+
+            <div class="col-md-5 col-sm-5 col-xs-12">
+
+                <h5>@Model.modelX.graduate_name @Model.modelX.graduate_surname</h5>
+                <p>@Model.modelX.graduate_workfield </p>
+                <ul>
+
+                    <li><span class="glyphicon glyphicon-map-marker"></span> @Model.modelX.graduate_city / @Model.modelX.graduate_country </li>
+                    <li><span class="glyphicon glyphicon-phone"></span> @Model.modelX.graduate_phone</li>
+                    <li><span class="glyphicon glyphicon-envelope"></span>@Model.modelX.graduate_mail</li>
+
+                </ul>
+            </div><!--col-md-8 col-sm-8 col-xs-12 close-->
+
+
+        </div><!--profile-head close-->
+    </div><!--container close-->
+
+    <br><br>
+    <div id="sticky" class="container">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs nav-menu" role="tablist">
+            <li class="active">
+                <a href="#profile" role="tab" data-toggle="tab">
+                    <i class="fa fa-male"></i> Profil
+                </a>
+            </li>
+            <li>
+                <a href="#change" role="tab" data-toggle="tab">
+                    <i class="fa fa-key"></i> Deneyim
+                </a>
+            </li>
+            <li>
+                <a href="#notice" role="tab" data-toggle="tab">
+                    <i class="fa fa-key"></i> İlan
+                </a>
+            </li>
+        </ul><!--nav-tabs close-->
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane fade active in" id="profile">
+                <div class="container">
+                    <div class="col-sm-11" style="float:left;">
+                    </div><!--col-sm-12 close-->
+                    <br clear="all" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="pro-title">Bio Graph</h4>
+                        </div><!--col-md-12 close-->
+
+
+                        <div class="col-md-6">
+
+                            <div class="table-responsive responsiv-table">
+                                <table class="table bio-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>İsim</td>
+                                            <td>: @Model.modelX.graduate_name</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Soyisim</td>
+                                            <td>: @Model.modelX.graduate_surname</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Yaş</td>
+                                            <td>
+                                                :
+                                                @{
+                                                    var p = DateTime.Now.Year - Model.modelX.graduate_birth.Year;
+                                                }
+                                                @p
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ülke</td>
+                                            <td>: @Model.modelX.graduate_country</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Şehir</td>
+                                            <td>: @Model.modelX.graduate_city</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Açık Adres</td>
+                                            <td>: @Model.modelX.graduate_fulladress</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Çalıştığı pozisyon</td>
+                                            <td>: @Model.modelX.graduate_workposition</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div><!--table-responsive close-->
+                        </div><!--col-md-6 close-->
+
+                        <div class="col-md-6">
+
+                            <div class="table-responsive responsiv-table">
+                                <table class="table bio-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>e@mail</td>
+                                            <td>: @Model.modelX.graduate_mail</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Telefon</td>
+                                            <td>: +90 @Model.modelX.graduate_phone</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Okul</td>
+                                            <td>: @Model.modelX.graduate_school</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ortalama</td>
+                                            <td>: @Model.modelX.graduate_school_average</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Dil</td>
+                                            <td>
+                                                :
+                                                @foreach (var item in @Model.modelX.graduate_language)
+                                                {
+                                                    <span>, <span>@item </span></span>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sertifika</td>
+                                            <td>
+                                                @foreach (var item in @Model.modelX.graduate_certificate)
+                                                {
+                                                    <span>: <span>@item </span>,</span>
+                                                }
+
+                                            </td>
+                                        <tr>
+                                            <td>İlgialanı</td>
+                                            <td>: @Model.modelX.graduate_workfield</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div><!--table-responsive close-->
+                        </div><!--col-md-6 close-->
+                    </div><!--row close-->
+                </div><!--container close-->
+            </div><!--tab-pane close-->
+
+
+            <div class="tab-pane fade" id="change">
+                <div class="container fom-main">
+
+                    <div class="row text-center">
+                        <div class="card" style="margin:0% 5% 0% 0%; background-color:#FFECE8; border-radius:10px; text-align:left;">
+                            <div class="card-body ">
+                                <br />
+                                <h5 class="card-title">İş deneyimi listesi</h5>
+                                @if (Model.modelX.graduate_job_list.Count == 0)
+                                {
+                                    <p class="card-text">Listede iş deneyimi bulunmamaktadır</p>
+                                }
+                                else
+                                {
+                                    <p class="card-text">@Model.modelX.graduate_name 'nin deneyimleri aşşağıdadır.</p>
+                                }
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                    </div><!--row close-->
+
+                    <br /><br />
+                    @foreach (var item in Model.modelX.graduate_job_list)
+                    {
+
+                        <div class="row text-center">
+                            <div class="card row justify-content-between" style="margin:0% 5% 0% 0%; background-color:#FFECE8; border-radius:10px; text-align:left;">
+                                <div class="card-body ">
+
+                                    <h3 class="card-title">@item.job_company.company_name</h3>
+                                    @{
+                                        var jobyear = item.ending_date.Year - item.start_date.Year;
+                                        var jobmonyh = item.ending_date.Month - item.start_date.Month;
+                                    }
+                                    <h4>Pozisyon : @item.job_workposition</h4>
+                                    @if (item.ending_date.Year == 0001)
+                                    {
+                                        <h4> @item.start_date <span>'den beridir çalışmakta</span></h4>
+                                    }
+                                    else
+                                    {
+                                        <h4>Süre : @jobyear yıl @jobmonyh ay çalışmıştır</h4>
+                                    }
+                                    <a href="/deletejob/@user.admin_id/@item.job_id"  class="btn btn-danger">Deneyimi Sil</a>
+
+                                    <br />
+
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <br /> <br />
+                    }
+                </div><!--container close -->
+
+            </div><!--tab-pane close-->
+
+
+            <div class="tab-pane fade text-center" id="notice">
+                <div class="container fom-main">
+                    <div class="row ">
+                        <div class="card" style="margin:0% 5% 0% 0%; background-color:#FFECE8; border-radius:10px; text-align:left;">
+                            <div class="card-body ">
+                                <br />
+                                <h5 class="card-title">İş deneyimi listesi</h5>
+                                @if (Model.jobnoticelist.Count == 0)
+                                {
+                                    <p class="card-text">Listede iş deneyimi bulunmamaktadır</p>
+                                }
+                                else
+                                {
+                                    <p class="card-text">@Model.modelX.graduate_name 'nin ilanları aşşağıdadır</p>
+                                }
+
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                    </div><!--row close-->
+
+                    <br><br>
+                    @foreach (var item in Model.jobnoticelist)
+                    {
+
+                        <div class="row text-center">
+                            <div class="card row justify-content-between" style="margin:0% 5% 0% 0%; background-color:#FFECE8; border-radius:10px; text-align:left;">
+                                <div class="card-body ">
+
+                                    <h3 class="card-title">@item.notice_title</h3>
+                                    <h>@item.notice_text</h>
+                                    <h4>Aranan pozisyon : @item.notice_workfield</h4>
+                                    <h4>Maaş : @item.notice_job_salary</h4>
+                                    <h4>Tarih : @item.notice_date</h4>
+
+                                    <a href="/deletenotice/@user.admin_id/@item.notice_id"  class="btn btn-danger">İlan Sil</a>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                        <br /> <br />
+                    }
+                    @foreach (var item in Model.internlist)
+                    {
+
+                        <div class="row text-center">
+                            <div class="card row justify-content-between" style="margin:0% 5% 0% 0%; background-color:#FFECE8; border-radius:10px; text-align:left;">
+                                <div class="card-body ">
+
+                                    <h3 class="card-title">@item.notice_title</h3>
+                                    <h4>@item.notice_text</h4>
+                                    <h4>Aranan pozisyon : @item.notice_workfield</h4>
+                                    <h4>Hangi dönem : @item.notice_intern_period</h4>
+                                    <h4>Kaç gün : @item.notice_intern_lenght_days</h4>
+                                    <h4>Tarih : @item.notice_date</h4>
+
+                                    <a href="/deletenotice/@user.admin_id/@item.notice_id"  class="btn btn-danger">İlan Sil</a>
+                                    <br />
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <br /> <br />
+                    }
+
+                </div><!--container close -->
+            </div><!--tab-pane close-->
+
+
+        </div><!--tab-content close-->
+
+    </div><!--container close-->
+
+</section><!--section close-->
+<!--Follow pop-up Başlangıç-->
+
+<div class="modal fade" id="modalFollow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <table class="table">
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="col">isim</th>
+                        <th scope="col">soyisim</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.modelX.graduate_followx)
+                    {
+                        GraduateDB temp = new GraduateDB();
+                        temp = graduatemanager.getID(item);
+                    <tr>
+                        <th scope="row">
+                            @Html.ActionLink(temp.graduate_name, "Profil", "AdminProfile", new { area = "Admin", grad_id = temp.graduate_id }, new { style = " font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;font-size:30px;font-weight:bold;" })
+                        </th>
+                        <td>
+                            @Html.ActionLink(temp.graduate_surname, "Profil", "AdminProfile", new { area = "Admin", grad_id = temp.graduate_id }, new { style = " font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;font-size:30px;font-weight:bold;" })
+                        </td>
+                    </tr>
+                }
+                    </tbody>
+                </table>
+        </div>
+    </div>
+</div>
+
+<!--Follower pop-up Başlangıç-->
+
+<div class="modal fade" id="modalFollowers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <table class="table">
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="col">isim</th>
+                        <th scope="col">soyisim</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.modelX.graduate_followersx)
+                    {
+                        GraduateDB temp = new GraduateDB();
+                        temp = graduatemanager.getID(item);
+                    <tr>
+                        <th scope="row" >
+                        @Html.ActionLink(temp.graduate_name, "Profil", "AdminProfile", new { area = "Admin", grad_id = temp.graduate_id }, null)
+                    </th>
+                     <td>
+                         @Html.ActionLink(temp.graduate_surname, "Profil", "AdminProfile", new { area = "Admin", grad_id = temp.graduate_id }, null)
+                    </td>
+                </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

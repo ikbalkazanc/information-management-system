@@ -1,0 +1,113 @@
+﻿@using MEBSİS.Models
+@using Entities.Databases
+
+@model NoticeView
+
+@{
+    SelectionList selection = new SelectionList();
+
+    ViewBag.Title = "NoticePage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("NoticePage", "Notice", FormMethod.Post))
+{
+    <div class="well">
+        <div class="media">
+            <div class="media-body">
+                <div class="custom-control custom-checkbox" style="display:inline-flex;">
+                    <label class="" style="display:inline-flex;margin-left:20px;" for="customCheckDisabled2">Staj İlanı : </label>
+                    @Html.CheckBoxFor(m => m.filter_isIntern, new { @class = "form-control", style = "display:inline-flex;height:18px;width:20px;margin-left:10px;", id = "customCheckDisabled2", type = "checkbox" })
+                </div>
+                <div class="custom-control custom-checkbox" style="display:inline-flex;">
+                    <label class="" style="display:inline-flex;margin-left:20px;" for="customCheckDisabled1">İş İlanı : </label>
+                    @Html.CheckBoxFor(m => m.filter_isJob, new { @class = "form-control", style = "display:inline-flex;height:18px;width:20px;margin-left:10px;", id = "customCheckDisabled1", type = "checkbox" })
+                </div>
+
+                <label class="" style="display:inline-flex;margin-left:20px;" for="customCheckDisabled3">Pozisyon : </label>
+                @Html.DropDownListFor(m => m.filter_position,
+                    new SelectList(selection.selection),
+                    "Pozisyon", new { @class = "form-control", style = "display:inline-flex;", id = "customCheckDisabled3", placeholder = "min" })
+
+                <hr style="border-color:dimgrey;">
+
+                <label class="" style="display:inline-flex;margin-left:20px;" for="customCheckDisabled3">Maaş : </label>
+                @Html.TextBoxFor(m => m.filter_min_salary, new { @class = "form-control", placeholder = "min", style = "display:inline-flex;width:60px;margin-left:20px;margin-right:10px;", id = "customCheckDisabled3", type = "text", })-
+                @Html.TextBoxFor(m => m.filter_max_salary, new { @class = "form-control", placeholder = "max", style = "display:inline-flex;width:60px;margin-left:10px;", id = "customCheckDisabled3", type = "text", })
+                <hr style="border-color:dimgrey;">
+                <label class="" style="display:inline-flex;margin-left:20px;" for="customCheckDisabled4">Gün : </label>
+
+                @Html.TextBoxFor(m => m.filter_min_day, new { @class = "form-control", placeholder = "min", style = "display:inline-flex;width:60px;margin-left:20px;margin-right:10px;", id = "customCheckDisabled4", type = "text", })-
+                @Html.TextBoxFor(m => m.filter_max_day, new { @class = "form-control", placeholder = "max", style = "display:inline-flex;width:60px;margin-left:10px;", id = "customCheckDisabled4", type = "text", })
+                <div class="custom-control custom-checkbox" style="display:inline-flex;">
+                    <label class="" style="display:inline-flex;margin-left:20px;" for="customCheckDisabled2">Güz : </label>
+                    @Html.CheckBoxFor(m => m.filter_isAutum, new { @class = "form-control", style = "display:inline-flex;height:18px;width:20px;margin-left:10px;", id = "customCheckDisabled2", type = "checkbox" })
+                </div>
+                <div class="custom-control custom-checkbox" style="display:inline-flex;">
+                    <label class="" style="display:inline-flex;margin-left:20px;" for="customCheckDisabled1">Yaz : </label>
+                    @Html.CheckBoxFor(m => m.filter_isSpring, new { @class = "form-control", style = "display:inline-flex;height:18px;width:20px;margin-left:10px;", id = "customCheckDisabled1", type = "checkbox" })
+                </div>
+                <button type="submit" class="btn btn-success pull-right" style="margin:0px 20px;">Filitrele</button>
+
+                @Html.ActionLink("Reset", "NoticePage", "Notice", new { area = "", grad_id = Int32.Parse(User.Identity.Name) }, new { @class = "btn btn-warning pull-right", style = "margin:0px 0px;" })
+            </div>
+        </div>
+    </div>
+}
+
+<h2>İlan Sayfası</h2>
+
+@foreach (var item in Model.interns)
+{
+    <div class="well">
+        <div class="media">
+
+            <div class="media-body">
+                <h4 class="media-heading">@item.notice_title</h4>
+
+                <p>
+                    @item.notice_text
+                </p>
+                <ul class="list-inline list-unstyled">
+                    <span style="margin-left:8px;"><i class="glyphicon glyphicon-user"></i></span>
+                    <span><a href="/profil/@Model.id/@item.notice_graduate.graduate_id">   @item.notice_graduate.graduate_name @item.notice_graduate.graduate_surname</a></span>
+
+                    <li>|</li>
+                    <li><span><i class="glyphicon glyphicon-calendar"></i> @item.notice_date.Day / @item.notice_date.Month / @item.notice_date.Year </span></li>
+
+
+                </ul>
+
+                <span><a href="/duvar/@Model.id/@item.notice_id" class="btn btn-info pull-right">Devamını görüntüle...</a></span>
+            </div>
+        </div>
+    </div>
+
+}
+@foreach (var item in Model.jobs)
+{
+    <div class="well ">
+        <div class="media">
+
+            <div class="media-body">
+
+                <h4 class="media-heading">@item.notice_title</h4>
+
+                <p>
+                    @item.notice_text
+                </p>
+                <ul class="list-inline list-unstyled">
+                    <span style="margin-left:8px;"><i class="glyphicon glyphicon-user"></i> <a href="/profil/@Model.id/  @item.notice_graduate.graduate_id">@item.notice_graduate.graduate_name @item.notice_graduate.graduate_surname</a></span>
+                    <li>|</li>
+
+
+                    <li><span><i class="glyphicon glyphicon-calendar"></i> @item.notice_date.Day / @item.notice_date.Month / @item.notice_date.Year </span></li>
+                </ul>
+
+                <span><a href="/duvar/@Model.id/@item.notice_id" class="btn btn-info pull-right">Devamını görüntüle...</a></span>
+            </div>
+        </div>
+    </div>
+
+}
+
+

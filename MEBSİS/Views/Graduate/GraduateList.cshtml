@@ -1,0 +1,60 @@
+﻿@using MEBSİS.Models
+@using Postgresql.Manager.Managers
+@using Entities.Databases
+@model HomeViewModel<GraduateDB>
+@{
+    ViewBag.Title = "GraduateList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+    GraduateDB user = new GraduateDB();
+    GraduateManager graduatemanagerx = GraduateManager.CreateAsGraduateManager();
+    if (User.Identity.Name != "")
+    { 
+        user = graduatemanagerx.getID(Int32.Parse(User.Identity.Name));  
+    }
+
+}
+
+
+<br>
+<br>
+<br>
+<br>
+<h2>GraduateList</h2>
+<hr>
+
+<div class="alert alert-success" role="alert">
+    <div>
+        Sistemdeki mezunlar :
+        
+        <div style="display:inline;" class="pull-right">
+            
+        <input type="text" id="myInput" style="margin-top:-20px;" onkeyup="myFunction()" placeholder="Search for names..">
+        </div>
+    </div>
+</div>
+
+
+<table class="table" id="myTable" >
+    <thead class="thead-dark text-center">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">isim</th>
+            <th scope="col">soyisim</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.modelsX)
+        {
+        <tr>
+            
+            <th scope="row">@item.graduate_id</th>
+            <td><a href="/profil/@user.graduate_id/@item.graduate_id">@item.graduate_name</a></td>
+            <td><a href="/profil/@user.graduate_id/@item.graduate_id">@item.graduate_surname</a></td>  
+        </tr>
+        }
+    </tbody>
+</table>
+

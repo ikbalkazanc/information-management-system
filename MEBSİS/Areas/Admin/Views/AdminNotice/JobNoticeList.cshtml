@@ -1,0 +1,61 @@
+﻿@using MEBSİS.Models
+@using Entities.Databases
+@model HomeViewModel<JobNoticeDB>
+@{
+    ViewBag.Title = "JobNoticeList";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@*BU SAYFA HATALI DÜZELTİLMESİ GEREKİYOR*@
+<br>
+<br>
+<br>
+<br>
+<h2>JobNoticeList</h2>
+<hr>
+<br>
+<br>
+
+<table class="table">
+    <thead class="thead-dark text-center">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">mezun id</th>
+            <th scope="col">mezun ad</th>
+            <th scope="col">title</th>
+            <th scope="col">text</th>
+            <th scope="col">date</th>
+            <th scope="col">workfield</th>
+            <th scope="col">Maaş</th>
+            <th scope="col">iş türü</th>
+            <th scope="col">Sil</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.modelsX)
+        {
+        <tr>
+            <th scope="row">@item.notice_id</th>
+            <td>@item.notice_graduate.graduate_id</td>
+            <td>@item.notice_graduate.graduate_name</td>
+            <td>@item.notice_title</td>
+            <td>@item.notice_text</td>
+            <td>@item.notice_date</td>
+            <td>@item.notice_workfield</td>
+            <td>@item.notice_job_salary</td>
+            @if (item.isIntern == true)
+            {
+                <td>Staj</td>
+            }
+            else
+            {
+                <td>İş</td>
+            }
+            <td>
+                <a href="/MGS/DeletePerson/@item.notice_id" style="margin:0px -30px" class="btn btn-danger">Kişiyi Sil</a>
+            </td>
+
+        </tr>
+        }
+    </tbody>
+</table>

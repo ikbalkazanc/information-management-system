@@ -1,0 +1,56 @@
+﻿@using MEBSİS.Models
+@model LoginView
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <style>
+        body {
+           background-image:url('https://images.unsplash.com/photo-1466781783364-36c955e42a7f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1051&q=80');
+           background-size:cover;
+        }
+    </style>
+
+<div class="container">
+    <div class="card card-container">
+        <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
+        <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+        <p id="profile-name" class="profile-name-card"></p>
+       
+            <span id="reauth-email" class="reauth-email"></span>
+            @using (Html.BeginForm("LoginOK", "Security", FormMethod.Post))
+            {
+                @Html.TextBoxFor(m => m.id, new
+                {
+                    @class = "form-control"@*, value = @Model.modelX.graduate_id*@,
+               id = "inputEmail",
+               type = "number",
+               placeholder = "id'nizi giriniz",
+               autofocus = "autofocus",
+               required = "required"
+
+           })
+                <br>
+            @Html.TextBoxFor(m => m.password, new
+   {
+           @class = "form-control"@*, value = @Model.modelX.graduate_id*@,
+           id = "inputPassword",
+           type = "password",
+           placeholder = "şifrenizi giriniz",
+           required = "required"
+       })
+            <div id="remember" class="checkbox">
+                <label>
+                    
+                    @Html.CheckBoxFor(m => m.graduate)  Admin girişi
+                </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+        
+            }
+        <a href="#" class="forgot-password">
+            Şifremi unuttum?
+        </a>
+    </div><!-- /card-container -->
+
+</div><!-- /container -->

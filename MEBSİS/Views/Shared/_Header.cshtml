@@ -1,0 +1,81 @@
+﻿@using Postgresql.Manager.Managers
+@using Entities.Databases
+
+@{
+    bool accountOn = true;
+    GraduateDB user = new GraduateDB();
+    GraduateManager graduatemanagerx = GraduateManager.CreateAsGraduateManager();
+    if (User.Identity.Name == "")
+    {
+        accountOn = false;
+    }
+    else
+    {
+        user = graduatemanagerx.getID(Int32.Parse(User.Identity.Name));
+        
+    }
+    
+    Layout = null;
+}
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid container body-content">
+        @if (accountOn)
+        {
+            
+            <ul class="nav navbar-nav ">
+                <li>
+
+                    @Html.ActionLink("İlan Duvarı", "NoticePage", "Notice",new { id=user.graduate_id}, new { @class = "navbar-brand" })
+                </li>
+
+                <li class="dropdown">
+                    @Html.ActionLink("Profiller ▼", "JobList", "Job", new { area = "" }, new { @class = "navbar-brand dropdown-toggle", data_toggle = "dropdown" })
+                    <ul class="dropdown-menu">
+                       
+                        <li> @Html.ActionLink("Mezunlar", "GraduateList", "Graduate", new { user_id = user.graduate_id, grad_id = user.graduate_id }, new { @class = "navbar-brand" })</li>
+                        <li> @Html.ActionLink("Firmalar", "CompanyList", "Company", new { user_id = user.graduate_id, grad_id = user.graduate_id }, new { @class = "navbar-brand" })</li>
+                    </ul>
+                </li>
+
+               
+                
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                @Html.ActionLink("Çıkış", "LogOut", "Security", new { area = "" }, new { @class = "navbar-brand" })
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                @Html.Label("  |  ", new {@class = "navbar-brand" })
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                @Html.ActionLink(user.graduate_name +" "+ user.graduate_surname, "Profil","Profile", new { user_id = user.graduate_id, grad_id = user.graduate_id }, new { @class = "navbar-brand" })
+
+            </ul>
+
+
+        }
+        else
+        {
+            <ul class="nav navbar-nav ">
+
+                @Html.Label("MEBSİS", new { @class = "navbar-brand" })
+
+            </ul>
+
+           
+            <ul class="nav navbar-nav navbar-right">
+
+                @Html.ActionLink("Giriş Yap", "Login", "Security", new { area = "" }, new { @class = "navbar-brand" })
+
+            </ul>
+        }
+    </div>
+</nav>
+
+

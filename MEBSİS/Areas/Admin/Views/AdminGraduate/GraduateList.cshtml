@@ -1,0 +1,157 @@
+﻿@using MEBSİS.Models
+@using Entities.Databases
+@using Postgresql.Manager.Managers
+@using Entities.Databases
+@model HomeViewModel<GraduateDB>
+@{
+    ViewBag.Title = "GraduateList";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@{
+    bool accountOn = true;
+    Admin user = new Admin();
+    AdminManager adminManager = AdminManager.CreateAsAdminManager();
+
+    if (User.Identity.Name == "")
+    {
+        accountOn = false;
+    }
+    else
+    {
+        user = adminManager.getID(Int32.Parse(User.Identity.Name));
+
+    }
+}
+
+<br>
+<br>
+<br>
+<br>
+<h2>GraduateList</h2>
+<hr>
+
+<div class="alert alert-success" role="alert">
+    <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @using (Html.BeginForm("GraduateAdd", "AdminGraduate", new { area = "Admin" }, FormMethod.Post))
+                {
+                    <div class="modal-header text-center">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title w-100 font-weight-bold">
+                            @Html.Label("Mezun ekleme paneli")
+                        </h4>
+                    </div>
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5">
+
+                            @Html.Label("Ad :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-name" })
+                            @*<label data-error="wrong" data-success="right" for="">Your name</label>*@
+                            @Html.TextBoxFor(m => m.modelX.graduate_name, new { @class = "form-control validate", id = "Form-name", type = "text", })
+                            @*<input type="text" id="orangeForm-name" class="form-control validate">*@
+                            <i class="fas fa-user prefix grey-text"></i>
+                        </div>
+
+
+                        <div class="md-form mb-4">
+                            @Html.Label("Soyad :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-surname" })
+                            @Html.TextBoxFor(m => m.modelX.graduate_surname, new { @class = "form-control validate", id = "Form-surname", type = "text", })
+                            <i class="fas fa-lock prefix grey-text"></i>
+                        </div>
+                        <div class="md-form mb-4">
+                            @Html.Label("Şifre :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-pass" })
+                            @Html.TextBoxFor(m => m.modelX.graduate_password, new { @class = "form-control validate", id = "Form-pass", type = "password", })
+                            <i class="fas fa-lock prefix grey-text"></i>
+                        </div>
+                        <div class="md-form mb-4">
+                            @Html.Label("Doğum tarihi :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-birth" })
+                            @Html.TextBoxFor(m => m.modelX.graduate_date_temp, new { @class = "form-control validate", id = "Form-birth", type = "date" })
+                            <i class="fas fa-lock prefix grey-text"></i>
+                        </div>
+                        <hr />
+                        <div class="md-form mb-4">
+                            @Html.Label("Ülke :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-country" })
+                            @Html.TextBoxFor(m => m.modelX.graduate_country, new { @class = "form-control validate", id = "Form-country", type = "text", })
+                            <i class="fas fa-lock prefix grey-text"></i>
+                        </div>
+                        <div class="md-form mb-4">
+                            @Html.Label("Şehir :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-city" })
+                            @Html.TextBoxFor(m => m.modelX.graduate_city, new { @class = "form-control validate", id = "Form-city", type = "text", })
+                            <i class="fas fa-lock prefix grey-text"></i>
+                        </div>
+
+                        <div class="md-form mb-4">
+                            @Html.Label("Açık adres :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-address" })
+                            @Html.TextBoxFor(m => m.modelX.graduate_fulladress, new { @class = "form-control validate", id = "Form-address", type = "text", size = "49" })
+                            <i class="fas fa-lock prefix grey-text"></i>
+                        </div>
+                        <div class="md-form mb-4">
+                            @Html.Label("Okul :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-school" })
+                            @Html.TextBoxFor(m => m.modelX.graduate_school, new { @class = "form-control validate", id = "Form-school", type = "text", })
+                            <i class="fas fa-lock prefix grey-text"></i>
+                        </div>
+                        <div class="md-form mb-4">
+                            @Html.Label("Ortalamanız :", new { @class = "", data_error = "wrong", data_success = "right", @for = "Form-average" })
+                            @Html.TextBoxFor(m => m.modelX.graduate_school_average, new { @class = "form-control validate", id = "Form-average", type = "text", })
+                            <i class="fas fa-lock prefix grey-text"></i>
+                        </div>
+
+
+
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center ">
+                        <button type="submit" class="btn btn-deep-orange">Ekle</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        Sisteme yeni bir mezun öğrenci eklemek için tıklayınız.
+        <a href="" class="btn btn-default btn-rounded mb-4 btn btn-warning" data-toggle="modal" data-target="#modalRegisterForm">
+            Yeni Kişi Ekle
+        </a>
+        <div style="display:inline;" class="pull-right">
+
+            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+        </div>
+    </div>
+
+</div>
+
+
+<table class="table" id="myTable">
+    <thead class="thead-dark text-center">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">isim</th>
+            <th scope="col">soyisim</th>
+            <th scope="col">Sil</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.modelsX)
+        {
+            <tr>
+                <th scope="row">@item.graduate_id</th>
+                <td>
+                @Html.ActionLink(item.graduate_name, "Profil", "AdminProfile", new { area = "Admin", grad_id = item.graduate_id }, null)
+                </td>
+                
+                <td>@Html.ActionLink(item.graduate_surname, "Profil", "AdminProfile", new { area = "Admin", grad_id = item.graduate_id }, null)</td>
+                <td>
+                    
+                    @Html.ActionLink("Sil", "GraduateDelete", "AdminGraduate", new { area = "Admin", id = item.graduate_id }, new  {style = "margin:0px -30px", @class = "btn btn-danger"})
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

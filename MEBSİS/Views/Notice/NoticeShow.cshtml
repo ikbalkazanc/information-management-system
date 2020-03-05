@@ -1,0 +1,46 @@
+﻿@using MEBSİS.Models
+@using Entities.Databases
+@model NoticeView
+@{
+    ViewBag.Title = "NoticeShow";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (@Model.intern.notice_intern_period != null)
+{
+    <div class="jumbotron">
+        <h1>@Model.intern.notice_title</h1>
+        <p>@Model.intern.notice_text</p>
+
+    </div>
+    <div class="jumbotron">
+        <br> <br>
+        <h2><b>Stajyer İş İlanı</b></h2>
+        <a href="/profil/@Model.id/@Model.intern.notice_graduate.graduate_id"><h3>Paylaşan  : @Model.intern.notice_graduate.graduate_name @Model.intern.notice_graduate.graduate_surname</h3></a>
+        <h3>İletişim  : +90 @Model.intern.notice_graduate.graduate_phone</h3>
+        <h3>Aranan Pozisyon  : @Model.intern.notice_workfield</h3>
+        <h3>Dönem  : @Model.intern.notice_intern_period</h3>
+        <h3>Gün  : @Model.intern.notice_intern_lenght_days</h3>
+        <br>
+    </div>
+}
+else
+{
+    <div class="jumbotron">
+        <h1>@Model.job.notice_title</h1>
+        <p>@Model.job.notice_text</p>
+
+    </div>
+    <div class="jumbotron">
+        <br> <br>
+        <h2><b>Stajyer İş İlanı</b></h2>
+        <h3>Paylaşan  : 
+        <a href="/profil/@Model.id/@Model.job.notice_graduate.graduate_id">@Model.job.notice_graduate.graduate_name @Model.job.notice_graduate.graduate_surname</a>
+        </h3>
+        <h3>İletişim  : +90 @Model.job.notice_graduate.graduate_phone</h3>
+        <h3>Aranan Pozisyon  : @Model.job.notice_workfield</h3>
+        <h3>Maaş  : @Model.job.notice_job_salary</h3>
+       
+        <br>
+    </div>
+}

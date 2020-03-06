@@ -1,6 +1,6 @@
 # MEBSIS
 
-I developed information system like a linkedln. This project sole purpose of improve myself in programming skills. so you send to me my fault on email.
+I developed information system like a linkedln. This project sole purpose of improve myself in programming skills. for this reason please send to me my faults on email.
 
 
 
